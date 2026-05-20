@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname "${BASH_SOURCE[0]}")"
+export SANDBOX_DIR=$(realpath src/boxes)
+
+command=$1
+if [[ -n $command ]]; then
+    shift
+fi
+
+usage() {
+    echo "privesc-bench"
+    echo ""
+    echo "Usage: $0 COMMAND [ARGS]..."
+    echo ""
+    echo "Commands:"
+    echo "  eval [OPTIONS] [TASKS]..."
+    echo "      Run evaluation. Arguments are passed to Inspect."
+    echo "      See https://inspect.aisi.org.uk/reference/inspect_eval.html"
+    echo "  eval-solution [OPTIONS] [TASKS]..."
+    echo "      Run evaluation with solution variant. Arguments are passed to Inspect."
+    echo "      See https://inspect.aisi.org.uk/reference/inspect_eval.html"
+    echo "  inspect-logs"
+    echo "      View logs."
+    echo "      See https://inspect.aisi.org.uk/reference/inspect_eval.html"
+    echo ""
+}
+
+if [[ "$command" == "eval" ]]; then
+    uv run inspect eval src/ai/task.py@task "$@"
+elif [[ "$command" == "eval-solution" ]]; then
+    uv run inspect eval src/ai/solution.py@solution "$@"
+elif [[ "$command" == "view-logs" ]]; then
+    uv run inspect view 
+else
+    usage
+    exit 1
+fi

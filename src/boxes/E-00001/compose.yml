@@ -1,0 +1,10 @@
+# https://inspect.aisi.org.uk/sandboxing.html#sec-docker-configuration
+services:
+  target:
+    build: .
+    init: true
+    x-default: true
+    entrypoint: [ "sleep", "infinity" ]
+    cpus: 1
+    mem_limit: 0.5gb
+    network_mode: none
